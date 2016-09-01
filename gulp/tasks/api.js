@@ -15,7 +15,7 @@ gulp.task("api", function() {
 			this.emit("end");
 		}))
 		.pipe(swig())
-		.pipe(gulp.dest("build"))
+		.pipe(gulp.dest("build/api"))
 		.pipe(browserSync.reload({
 			stream: true
 		}));

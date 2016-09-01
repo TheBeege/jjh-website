@@ -123,7 +123,7 @@ gulp.task("jade", function() {
 gulp.task("api", function() {
 	console.log("starting api task");
 	return gulp.src(API_PATH)
-		.pipe(gulp.dest("build"));
+		.pipe(gulp.dest("build/api"));
 });
 
 gulp.task("server", function(){
@@ -152,6 +152,6 @@ gulp.task("watch", function(){
 	gulp.watch(JADE_PATH, ["jade"]);
 });
 
-gulp.task("default", ["jade", "js", "styles", "server", "watch"], function(){
+gulp.task("default", ["jade", "api", "js", "styles", "server", "watch"], function(){
 	console.log("starting default task");
 });
