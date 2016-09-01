@@ -13,25 +13,23 @@ var JADE_PATH = "src/jade/**/*.jade";
 
 gulp.task("jade", function() {
 	return gulp.src(JADE_PATH)
-		
-
-		// this doesn't work https://www.npmjs.com/package/gulp-data
 		.pipe(data(function(file){
-			return require("src/jade/api/" + path.basename(file.path, "listings.jade") + ".json");
+			// dirname gets the path name minus the file name
+			// split it using path.sep so it plays nicely on Windows and *nix systems
+			// chop off the last portion of the path, insert "api", and use that last
+			// segment of the path as the file name.
+			// this WILL NOT work for files not inside a directory
+			// honestly, i don't know why using the current directory ./<my path>
+			// wasn't working
+			var jsonFileName = path.dirname(file.path).split(path.sep).slice(0,-1).join(path.sep)
+				+ path.sep + 'api' + path.sep
+				+ path.dirname(file.path).split(path.sep).slice(-1) + ".jade.json";
+			console.log('looking for jsonFileName: ' + jsonFileName);
+			if(fs.existsSync(jsonFileName)) {
+				console.log("found data file! requiring!");
+				return require(jsonFileName);
+			}
 		}))
-
-		//doesn't work
-		// .pipe(data(function(){
-		// 	return require("./src/jade/api/listings.jade.json")
-		// }))
-		
-		//doesn't work. fs no longer a plugin?? https://codepen.io/hoichi/post/json-to-jade-in-gulp 
-		// .pipe(data(function(file) {
-		// 	return JSON.parse(
-		//     	fs.readFileSync('./src/jade/api/listings.jade.json')
-		// 	);
-		// }))
-
 		.pipe(plumber(function(err){
 			console.log("jade task error");
 			console.log(err);
